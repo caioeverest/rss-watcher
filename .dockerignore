@@ -16,6 +16,10 @@
 ######
 vendor/
 
+# releaser #
+############
+release.sh
+
 # OS generated files #
 ######################
 .DS_Store
