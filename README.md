@@ -18,13 +18,13 @@ services:
     image: caiobarcelos/rss-watcher:latest
     container_name: rss-watcher
     environment:
-	    - WEBHOOK="http://something.from/discod"
-	    - RSS="http://rss.your-feed.of/preference"
-	    - CRON="*/3 * * * * *"
-	    - CHARACTER_LIMIT=1900
-	    - PAYLOAD_COLOR=16685830
-	    - AVATAR_URL="https://your-avatar.jpg/"
-	    - BOT_NAME="Kingdon News"
+      - WEBHOOK=http://something.from/discod
+      - RSS=http://rss.your-feed.of/preference
+      - CRON=*/10 * * * * *
+      - CHARACTER_LIMIT=1900
+      - PAYLOAD_COLOR=16685830
+      - AVATAR_URL=http://your-avatar.jpg/
+      - BOT_NAME=YourBotName
 ```
 And that's it! Just execute ~~order 66~~ in your terminal `docker-compose up -d` and it will pull the image and build the container.
 
@@ -41,7 +41,7 @@ export CRON="*/3 * * * * *"
 export CHARACTER_LIMIT="1900"
 export PAYLOAD_COLOR="16685830"
 export AVATAR_URL="https://your-avatar.jpg/"
-export BOT_NAME="Teste Kingdom"
+export BOT_NAME="YourBotName"
 
 go run main.go
 ```
