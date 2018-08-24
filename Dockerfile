@@ -9,7 +9,7 @@ WORKDIR $GOPATH/src/github.com/caioever/rss-watcher/
 COPY Gopkg.toml Gopkg.lock ./
 RUN dep ensure --vendor-only
 COPY . ./
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /kingdom-rss-bot .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /rss-watcher .
 
 FROM scratch
 COPY --from=builder /rss-watcher ./
