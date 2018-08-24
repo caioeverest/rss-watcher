@@ -1,16 +1,15 @@
-FROM golang:1.10 AS builder
+FROM golang:1.10-alpine
 
-# Download and install the latest release of dep
-ADD https://github.com/golang/dep/releases/download/v0.4.1/dep-linux-amd64 /usr/bin/dep
-RUN chmod +x /usr/bin/dep
+RUN  mkdir -p /go/src \
+  && mkdir -p /go/bin \
+  && mkdir -p /go/pkg
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:$PATH
 
-# Copy the code from the host and compile it
+# now copy your app to the proper build path
+RUN mkdir -p $GOPATH/src/github.com/caioever/rss-watcher/
+ADD . $GOPATH/src/github.com/caioever/rss-watcher/
+
 WORKDIR $GOPATH/src/github.com/caioever/rss-watcher/
-COPY Gopkg.toml Gopkg.lock ./
-RUN dep ensure --vendor-only
-COPY . ./
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /rss-watcher .
-
-FROM scratch
-COPY --from=builder /rss-watcher ./
-ENTRYPOINT ["./rss-watcher"]
+RUN go build -o main .
+CMD ["/go/src/github.com/caioever/rss-watcher/main"]
