@@ -1,13 +1,14 @@
-# RSS Watcher  
-This is a simple bot that posts the content from a RSS feed on discord via *webhook*.
 
-## Dependences:
+# RSS Watcher  
+This is a simple bot that posts the content from an RSS feed to discord via *webhook*.
+
+## Dependencies:
  - github.com/robfig/cron  
  - github.com/lunny/html2md  
  - github.com/mmcdole/gofeed
 
 ## Running
-To run the bot, you can use the option you feel most comfortable with. Besides that, I'm putting the ones I believe are the easiests here.
+Here's a list of the easiest ways to run the bot, but you can use whatever you feel the most comfortable with.
 
 ### docker-compose:
 The docker image is already available on the my docker hub repository (*caiobarcelos/rss-watcher*). In order to run the bot, you can copy the docker-compose.yml below and change it to fit your needs.
@@ -62,10 +63,10 @@ go run main.go
 > Cron to run the pooling at the RSS.
 
 **CHARACTER_LIMIT** = 1900
-> Max amount of characters to be sent in embedded description (Discord's max is 2048) but there is also a [Read more] whith an url for the news. We recomend setting it at 1900 characters.
+> Max amount of characters to be sent in embedded description (Discord's max is 2048) but there is also a [Read more] with an URL for the news. We recommend setting it at 1900 characters.
 
 **PAYLOAD_COLOR** = 16685830
-> The color of the embedded box. Discord understands this color through a decimal value, so for you to set a color based on the HexTable, you must convert the identificator to a decimal value.
+> The color of the embedded box. Discord understands this color through a decimal value, so in order to set a color based on the HexTable, you must convert the identificator to a decimal value.
 > Here is a web [conversor](https://www.binaryhexconverter.com/hex-to-decimal-converter)
 
 **AVATAR_URL** = `https://static.kingdom.gg/discord-news-bot-logo.png`
