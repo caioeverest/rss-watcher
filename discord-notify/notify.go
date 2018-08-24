@@ -21,10 +21,10 @@ func Notify(conf *config.Config, payload []byte) {
 
 	defer res.Body.Close()
 
-	if res.StatusCode != 201 {
+	if res.StatusCode != 204 {
 		body, _ := ioutil.ReadAll(res.Body)
-		log.Print("PAYLOAD SENDED: ", r)
-		log.Panic("ERROR | HTTP-CODE:", string(res.StatusCode))
-		log.Panic("RESPONSE-body:", string(body))
+		log.Printf("PAYLOAD SENDED: %s", payload)
+		log.Printf("RESPONSE-BODY: %s", body)
+		log.Panicf("ERROR | HTTP-CODE: %d", res.StatusCode)
 	}
 }
