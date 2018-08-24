@@ -5,12 +5,12 @@ ADD https://github.com/golang/dep/releases/download/v0.4.1/dep-linux-amd64 /usr/
 RUN chmod +x /usr/bin/dep
 
 # Copy the code from the host and compile it
-WORKDIR $GOPATH/src/dev.kingdom.gg/kingdom-rss-bot/
+WORKDIR $GOPATH/src/github.com/caioever/rss-watcher/
 COPY Gopkg.toml Gopkg.lock ./
 RUN dep ensure --vendor-only
 COPY . ./
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /kingdom-rss-bot .
 
 FROM scratch
-COPY --from=builder /kingdom-rss-bot ./
-ENTRYPOINT ["./kingdom-rss-bot"]
+COPY --from=builder /rss-watcher ./
+ENTRYPOINT ["./rss-watcher"]
