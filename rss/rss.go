@@ -24,7 +24,7 @@ func Checkfeed(conf *config.Config) {
 
 	if !fileExist() {
 		log.Printf("Creating memory file")
-		err := ioutil.WriteFile(fileName, []byte(feed.Published), 0666)
+		err := ioutil.WriteFile(fileName, []byte(time.Now().UTC().Format(time.RFC1123)), 0666)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -32,13 +32,12 @@ func Checkfeed(conf *config.Config) {
 
 	memory := getFromMemory()
 
-	if !haveNews(feed.PublishedParsed, memory) {
+	if !haveNews(feed, feedSize, memory) {
 		log.Printf("There's nothing new... :c")
 		return
 	}
 
 	log.Printf("Wow looks like we have some new posts")
-	setNewHead(feed.Published)
 	send(conf, feed, feedSize, memory)
 }
 
@@ -64,14 +63,18 @@ func getFromMemory() time.Time{
 	return final.UTC()
 }
 
-func haveNews(published *time.Time, memory time.Time) bool{
-	if memory.Equal(*published) {
-		return false
+func haveNews(feed *gofeed.Feed, feedSize int, memory time.Time) bool{
+	for i := feedSize-1; i >= 0; i-- {
+		if  feed.Items[i].PublishedParsed.After(memory)  {
+			return true
+		}
 	}
-	return true
+
+	return false
 }
 
 func send(conf *config.Config, feed *gofeed.Feed, feedSize int, memory time.Time) {
+	temp := memory
 	for i := feedSize-1; i >= 0; i-- {
 		if  feed.Items[i].PublishedParsed.After(memory)  {
 			log.Printf("Building body of the post from date: %s", feed.Items[i].Published)
@@ -84,12 +87,18 @@ func send(conf *config.Config, feed *gofeed.Feed, feedSize int, memory time.Time
 			}
 
 			payload := util.BuildPayload(conf, body)
+			log.Printf("Sending payload")
 			nofity.Notify(conf, payload)
+			if feed.Items[i].PublishedParsed.After(temp) {
+				temp = *feed.Items[i].PublishedParsed
+				setNewHead(feed.Items[i].Published)
+			}
 		}
 	}
 }
 
 func setNewHead(updated string) {
+	log.Printf("Cleaning memory file")
 	err := os.Truncate(fileName, 100)
 	if err != nil {
 		log.Fatal(err)
